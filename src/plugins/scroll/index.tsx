@@ -17,9 +17,16 @@ export default class extends React.Component<iScrollProps, iScrollState> {
 
     onScroll = (e: any) => {
         if (document.body.scrollHeight - window.innerHeight - 50 < window.scrollY) {
-            if (!this.props.refreshing) {
-                this.props.onRefresh();
-            }
+            this.willScroll();
         }
     };
+    lastTime = 0;
+    willScroll() {
+        const now = Date.now();
+        if (this.lastTime === 0) this.lastTime = now;
+        if (!this.props.refreshing && now - this.lastTime > 1000) {
+            this.lastTime = now;
+            this.props.onRefresh();
+        }
+    }
 }
