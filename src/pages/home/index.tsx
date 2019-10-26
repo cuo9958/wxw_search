@@ -26,7 +26,7 @@ export default class extends React.Component<iProps, iState> {
     loadTxt = { activate: '松开加载', deactivate: '上拉加载更多', release: '加载中', finish: '...' };
     render() {
         return (
-            <div>
+            <Scroll refreshing={this.state.refreshing} onRefresh={this.onRefresh}>
                 <SearchBar />
                 <Swiper />
                 <div id="products">
@@ -34,10 +34,19 @@ export default class extends React.Component<iProps, iState> {
                         <ProductItem key={index} />
                     ))}
                 </div>
-            </div>
+            </Scroll>
         );
     }
     onRefresh = () => {
         console.log('up');
+        try {
+            this.setState({ refreshing: true });
+            setTimeout(() => {
+                this.setState({ refreshing: false });
+            }, 5000);
+        } catch (error) {
+            //
+        } finally {
+        }
     };
 }

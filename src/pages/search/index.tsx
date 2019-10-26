@@ -22,14 +22,14 @@ export default class extends React.Component<iTest, iTest> {
         return (
             <Fragment>
                 <SearchBar />
-                <div>
+                <Scroll onRefresh={this.onRefresh} refreshing={this.state.refreshing}>
                     <div className="searchbox"></div>
                     <div id="search_products">
                         {this.state.list.map((item, index) => (
                             <ProductItem key={index} />
                         ))}
                     </div>
-                </div>
+                </Scroll>
             </Fragment>
         );
     }

@@ -33,11 +33,14 @@ export default class Layout extends React.Component<iProps, iState> {
             <Fragment>
                 {this.props.children}
                 {['/'].includes(this.props.location.pathname) && (
-                    <div id="nav" className="flex-center">
-                        <div className="unit">{getHome(this.props.location.pathname)}</div>
-                        <div className="unit">{getList(this.props.location.pathname)}</div>
-                        <div className="unit">{getMe(this.props.location.pathname)}</div>
-                    </div>
+                    <Fragment>
+                        <div id="nav_base"></div>
+                        <div id="nav" className="flex-center">
+                            <div className="unit">{getHome(this.props.location.pathname)}</div>
+                            <div className="unit">{getList(this.props.location.pathname)}</div>
+                            <div className="unit">{getMe(this.props.location.pathname)}</div>
+                        </div>
+                    </Fragment>
                 )}
             </Fragment>
         );
