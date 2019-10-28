@@ -79,7 +79,7 @@ export default class extends React.Component<any, iDetailState> {
                     <div onClick={this.open} className="talk unit">
                         留 言
                     </div>
-                    <div className="list unit">记 录</div>
+                    <div className="list unit">查 看</div>
                 </div>
                 {this.state.showTxt && (
                     <div className="talk_to flex-left">

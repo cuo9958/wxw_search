@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import './index.less';
+import { Link } from 'react-router-dom';
 
 interface iProps {
     location: {
@@ -9,18 +10,51 @@ interface iProps {
 interface iState {}
 
 function getHome(pathname: string) {
-    if (pathname === '/') return <img src="https://static.daling.com/assets/xc_touch/static/img/shop-active.c326f0b.png" alt="" />;
-    return <img src="https://static.daling.com/assets/xc_touch/static/img/shop.b4d77f3.png" alt="" />;
+    if (pathname === '/')
+        return (
+            <Fragment>
+                <img src="https://static.daling.com/assets/xc_touch/static/img/shop-active.c326f0b.png" alt="" />
+                <div className="txt active">首页</div>
+            </Fragment>
+        );
+    return (
+        <Link to="/">
+            <img src="https://static.daling.com/assets/xc_touch/static/img/shop.b4d77f3.png" alt="" />
+            <div className="txt">首页</div>
+        </Link>
+    );
 }
 
 function getList(pathname: string) {
-    if (pathname === '/') return <img src="https://static.daling.com/assets/xc_touch/static/img/classification-active.c2a022f.png" alt="" />;
-    return <img src="https://static.daling.com/assets/xc_touch/static/img/classification.f23fc7f.png" alt="" />;
+    if (pathname === '/record')
+        return (
+            <Fragment>
+                <img src="https://static.daling.com/assets/xc_touch/static/img/classification-active.c2a022f.png" alt="" />
+                <div className="txt active">历史</div>
+            </Fragment>
+        );
+    return (
+        <Link to="/record">
+            <img src="https://static.daling.com/assets/xc_touch/static/img/classification.f23fc7f.png" alt="" />
+            <div className="txt">历史</div>
+        </Link>
+    );
 }
 
 function getMe(pathname: string) {
-    if (pathname === '/') return <img src="http://wxw.bxiaob.top/tmp/me2.png" alt="" />;
-    return <img src="http://wxw.bxiaob.top/tmp/me1.png" alt="" />;
+    if (pathname === '/me')
+        return (
+            <Fragment>
+                <img src="http://wxw.bxiaob.top/tmp/me2.png" alt="" />
+                <div className="txt active">我的</div>
+            </Fragment>
+        );
+    return (
+        <Link to="/me">
+            <img src="http://wxw.bxiaob.top/tmp/me1.png" alt="" />
+            <div className="txt">我的</div>
+        </Link>
+    );
 }
 
 export default class Layout extends React.Component<iProps, iState> {
@@ -32,7 +66,7 @@ export default class Layout extends React.Component<iProps, iState> {
         return (
             <Fragment>
                 {this.props.children}
-                {['/'].includes(this.props.location.pathname) && (
+                {['/', '/record', '/me'].includes(this.props.location.pathname) && (
                     <Fragment>
                         <div id="nav_base"></div>
                         <div id="nav" className="flex-center">
