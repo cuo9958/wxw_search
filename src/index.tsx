@@ -24,8 +24,9 @@ class App extends React.Component {
         );
     }
 
-    componentDidMount() {
-        this.regUser();
+    async componentDidMount() {
+        await this.regUser();
+        stores.Talk.init(stores.User.uid);
     }
     async regUser() {
         if (stores.User.uid) return;
