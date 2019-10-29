@@ -4,6 +4,7 @@ import Talk from '../../models/talk';
 import QueryString from 'query-string';
 import Utils from '../../services/utils';
 import { inject } from 'mobx-react';
+import utils from '../../services/utils';
 
 interface iState {
     txt: string;
@@ -77,9 +78,21 @@ export default class extends React.Component<any, iState> {
         );
     }
     componentDidMount() {
+        Talk.onMessage(this.query.id, this.onMessage);
         this.getList();
     }
-
+    onMessage = (msg: any) => {
+        const list = this.state.list;
+        list.push({
+            from: msg.from,
+            text: msg.text,
+            type: msg.type,
+            time: Utils.DateFormart(msg.updatedAt)
+        });
+        this.setState({ list }, () => {
+            document.documentElement.scrollTop = document.body.scrollHeight;
+        });
+    };
     async getList() {
         const data: any = await Talk.getMsgs(this.query.id);
         console.log(data);
@@ -101,10 +114,17 @@ export default class extends React.Component<any, iState> {
         this.setState({ txt: e.target.value });
     };
 
-    enter = () => {
+    enter = async () => {
         console.log(this.state.txt);
+        if (!this.state.txt) return;
         Talk.talkTo(this.query.id, this.state.txt);
-
+        this.onMessage({
+            id: '',
+            text: this.state.txt,
+            type: -1,
+            from: this.props.uid,
+            updatedAt: new Date()
+        });
         this.setState({ txt: '' });
     };
 }

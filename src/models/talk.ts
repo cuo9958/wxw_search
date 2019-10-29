@@ -32,8 +32,19 @@ class Talk implements iTalk {
      * 消息通知
      */
     _onMessage = (message: any, conversation: any) => {
-        console.log('收到新消息：' + message.text);
+        console.log('收到新消息：' + message.text, conversation);
+        if (conversation.id === this._emterMsg.id) {
+            this._emterMsg.fn && this._emterMsg.fn(message);
+        }
     };
+    _emterMsg = {
+        id: '',
+        fn: (msg: any) => {}
+    };
+    onMessage(id: string, fn: any) {
+        this._emterMsg.id = id;
+        this._emterMsg.fn = fn;
+    }
 
     async talkTo(id: string, message: string) {
         const qun = await this._getConversation(id);
@@ -57,7 +68,7 @@ class Talk implements iTalk {
      * @param uid
      * @param title
      */
-    async create(uid: string, title = '') {
+    async create(uid: string, id: number, title = '') {
         if (this.client == null) return;
         try {
             const conversation = await this.client.createConversation({
@@ -66,7 +77,8 @@ class Talk implements iTalk {
                 attributes: {
                     img: 'http://img5.daling.com/data/files/zin/public/common/2019/10/17/14/31/45/AIKGUER000002239101.JPG_375x375.jpg',
                     tit: '测试产品',
-                    uid
+                    uid,
+                    id
                 }, //自定义参数
                 unique: true
             });
@@ -101,7 +113,7 @@ class Talk implements iTalk {
         const qun = await this._getConversation(id);
         if (!qun) return;
         const list = await qun.queryMessages({
-            limit: 10,
+            limit: 20,
             type: TextMessage.TYPE
         });
         return list;

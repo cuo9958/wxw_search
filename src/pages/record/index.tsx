@@ -94,7 +94,7 @@ export default class extends React.Component<iProps, iState> {
         });
     };
     test = async () => {
-        const data = await this.props.Talk.create('d2ef43f1f5d7102a7fb1f5fd38f1498d');
+        const data = await this.props.Talk.create('d2ef43f1f5d7102a7fb1f5fd38f1498d', 1);
         console.log(data);
     };
 }
