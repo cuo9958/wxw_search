@@ -18,18 +18,19 @@ interface baseItem {
     name: string;
     id: string;
     members: string[];
-    lastMessage: string;
     lastMessageAt: Date;
     unreadMessagesCount: number;
 }
 interface iConvertion extends baseItem {
     _attributes: iAttr;
     updatedAt: Date;
+    lastMessage: any;
 }
 
 interface iItem extends baseItem {
     attrs: any;
     time: string;
+    lastMessage: string;
 }
 /**
  * 测试页
@@ -56,7 +57,7 @@ export default class extends React.Component<iProps, iState> {
                                     <img src={item.attrs.img} alt="" />
                                 </div>
                                 <div className="info">
-                                    <div className="title">{item.name}</div>
+                                    <div className="title">{item.name || '来自异地的朋友'}</div>
                                     <div className="msg">{item.lastMessage || '暂无消息'}</div>
                                 </div>
                                 <div className="time">{item.time}</div>
@@ -75,14 +76,13 @@ export default class extends React.Component<iProps, iState> {
     }
     getList = async () => {
         const data = await this.props.Talk.getList();
-        console.log(data);
         const list: iItem[] = [];
         data.forEach((item: iConvertion) => {
             list.push({
                 id: item.id,
                 name: item.name,
                 members: item.members,
-                lastMessage: item.lastMessage,
+                lastMessage: item.lastMessage ? item.lastMessage.txt : '',
                 lastMessageAt: item.lastMessageAt,
                 unreadMessagesCount: item.unreadMessagesCount,
                 attrs: item._attributes.attributes,
@@ -94,7 +94,7 @@ export default class extends React.Component<iProps, iState> {
         });
     };
     test = async () => {
-        const data = await this.props.Talk.create('Test');
+        const data = await this.props.Talk.create('d2ef43f1f5d7102a7fb1f5fd38f1498d');
         console.log(data);
     };
 }

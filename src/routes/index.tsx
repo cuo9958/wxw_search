@@ -7,6 +7,7 @@ import Search from '../pages/search/index';
 import Detail from '../pages/detail/index';
 import Record from '../pages/record/index';
 import Me from '../pages/me/index';
+import Talks from '../pages/talks/index';
 import Test from '../pages/test';
 
 const Main = withRouter((props: any) => <Layout {...props} />);
@@ -20,6 +21,7 @@ export default () => {
                 <Route path="/detail" component={Detail} />
                 <Route path="/record" component={Record} />
                 <Route path="/me" component={Me} />
+                <Route path="/talks" component={Talks} />
                 <Route path="/test" component={Test} />
             </Switch>
         </Main>

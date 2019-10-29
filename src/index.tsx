@@ -37,6 +37,7 @@ class App extends React.Component<any, iState> {
         this.setState({ ready: true });
     }
     async regUser() {
+        console.log(stores.User.uid);
         if (stores.User.uid) return;
         try {
             const data = await Finger.getPromise();

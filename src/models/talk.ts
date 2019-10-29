@@ -1,7 +1,8 @@
-import { Realtime, IMClient, TextMessage } from 'leancloud-realtime';
+import { Realtime, IMClient, TextMessage, Event } from 'leancloud-realtime';
 
 class Talk implements iTalk {
     client: IMClient | null = null;
+
     async init(uid: string) {
         const realtime = new Realtime({
             appId: 'HJegfut3f1fvzyDsqNCbNvlo-gzGzoHsz',
@@ -11,19 +12,45 @@ class Talk implements iTalk {
         });
         // Tom 用自己的名字作为 clientId 来登录即时通讯服务
         try {
-            const client = await realtime.createIMClient('Tom');
+            const client = await realtime.createIMClient(uid);
             this.client = client;
             console.log(client);
+            // 当前用户被添加至某个对话
+            client.on(Event.INVITED, this._onJoin);
+
+            // 当前用户收到了某一条消息，可以通过响应 Event.MESSAGE 这一事件来处理。
+            client.on(Event.MESSAGE, this._onMessage);
         } catch (error) {}
     }
+    /**
+     * 被加入群聊
+     */
+    _onJoin = (payload: any, conversation: any) => {
+        console.log(payload.invitedBy, conversation.id);
+    };
+    /**
+     * 消息通知
+     */
+    _onMessage = (message: any, conversation: any) => {
+        console.log('收到新消息：' + message.text);
+    };
 
-    talkTo(message: string) {
-        // conversation
-        //     .send(new TextMessage('Jerry，起床了！'))
-        //     .then(function(message: string) {
-        //         console.log('Tom & Jerry', '发送成功！');
-        //     })
-        //     .catch(console.error);
+    async talkTo(id: string, message: string) {
+        const qun = await this._getConversation(id);
+        if (!qun) return;
+        try {
+            qun.send(new TextMessage(message));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    /**
+     * 获取聊天对象
+     * @param id
+     */
+    _getConversation(id: string) {
+        if (this.client == null) return;
+        return this.client.getConversation(id);
     }
     /**
      * 创建一个对话
@@ -38,7 +65,8 @@ class Talk implements iTalk {
                 name: title,
                 attributes: {
                     img: 'http://img5.daling.com/data/files/zin/public/common/2019/10/17/14/31/45/AIKGUER000002239101.JPG_375x375.jpg',
-                    tit: '测试产品'
+                    tit: '测试产品',
+                    uid
                 }, //自定义参数
                 unique: true
             });
@@ -64,6 +92,19 @@ class Talk implements iTalk {
             console.log(error);
         }
         return [];
+    }
+    /**
+     * 获取消息历史记录
+     * @param id
+     */
+    async getMsgs(id: string) {
+        const qun = await this._getConversation(id);
+        if (!qun) return;
+        const list = await qun.queryMessages({
+            limit: 10,
+            type: TextMessage.TYPE
+        });
+        return list;
     }
 }
 
