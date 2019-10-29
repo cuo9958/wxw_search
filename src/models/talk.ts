@@ -37,8 +37,8 @@ class Talk implements iTalk {
                 members: [uid],
                 name: title,
                 attributes: {
-                    img: 'test',
-                    tit: 'tit'
+                    img: 'http://img5.daling.com/data/files/zin/public/common/2019/10/17/14/31/45/AIKGUER000002239101.JPG_375x375.jpg',
+                    tit: '测试产品'
                 }, //自定义参数
                 unique: true
             });

@@ -11,12 +11,19 @@ import getRoutes from './routes';
 
 import Finger from 'fingerprintjs2';
 
-class App extends React.Component {
-    // constructor(props: any) {
-    //     super(props);
-    //     //可以提前做一些事情
-    // }
+interface iState {
+    ready: boolean;
+}
+
+class App extends React.Component<any, iState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            ready: false
+        };
+    }
     render() {
+        if (!this.state.ready) return null;
         return (
             <Provider {...stores}>
                 <HashRouter ref="navigator">{getRoutes()}</HashRouter>
@@ -26,7 +33,8 @@ class App extends React.Component {
 
     async componentDidMount() {
         await this.regUser();
-        stores.Talk.init(stores.User.uid);
+        await stores.Talk.init(stores.User.uid);
+        this.setState({ ready: true });
     }
     async regUser() {
         if (stores.User.uid) return;
