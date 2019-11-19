@@ -33,7 +33,7 @@ class App extends React.Component<any, iState> {
 
     async componentDidMount() {
         await this.regUser();
-        await stores.Talk.init(stores.User.uid);
+        // await stores.Talk.init(stores.User.uid);
         this.setState({ ready: true });
     }
     async regUser() {
