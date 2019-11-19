@@ -4,7 +4,6 @@ import Talk from '../../models/talk';
 import QueryString from 'query-string';
 import Utils from '../../services/utils';
 import { inject } from 'mobx-react';
-import utils from '../../services/utils';
 
 interface iState {
     txt: string;
