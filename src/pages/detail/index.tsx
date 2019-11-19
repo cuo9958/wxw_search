@@ -2,6 +2,8 @@ import React from 'react';
 import './index.less';
 import { Link } from 'react-router-dom';
 import Toast from 'cogo-toast';
+import request from '../../services/request';
+import utils from '../../services/utils';
 
 interface iItemProps {
     label: string;
@@ -22,34 +24,46 @@ class Item extends React.PureComponent<iItemProps> {
 interface iDetailState {
     showTxt: boolean;
     txt: string;
+    model: any;
 }
-
-export default class extends React.Component<any, iDetailState> {
-    constructor(props: any) {
+interface iParams {
+    sku?: string;
+    id?: number;
+}
+export default class extends React.Component<iReactRoute, iDetailState> {
+    constructor(props: iReactRoute) {
         super(props);
         this.state = {
             showTxt: false,
-            txt: ''
+            txt: '',
+            model: {}
         };
-    }
 
+        this.params = utils.parseParams(props.location.search).query;
+    }
+    params: iParams = {};
     render() {
         return (
             <div id="product_detail">
                 <div className="detail_img">
-                    <img src="http://img9.daling.com/data/files/zin/2019/02/23/22/26/FA163E0BD2F9J2NM21V212JQU2C.jpg" alt="" />
+                    <img src={this.state.model.image} alt="" />
                 </div>
                 <div className="info">
-                    <div className="dot">手感舒适耐用</div>
-                    <div className="title">[得力]安格耐特比赛专用篮球(通用)</div>
+                    <div className="dot">{this.state.model.title}</div>
+                    {/* <div className="title">[得力]安格耐特比赛专用篮球(通用)</div> */}
                     <div className="price">
-                        <span className="m">¥</span>77.0<del>¥80.5</del>
+                        <span className="m">¥</span>
+                        {this.state.model.price}/{this.state.model.unit}
+                        {/* <del>¥80.5</del> */}
                     </div>
                 </div>
                 <div className="concant">
-                    <Item label="送至" txt="北京市朝阳区住邦2000" />
-                    <Item label="运费" txt="包邮" />
-                    <Item label="库存" txt="124件" />
+                    {this.state.model.place && <Item label="产地" txt={this.state.model.place} />}
+                    {this.state.model.express && <Item label="快递信息" txt={this.state.model.express} />}
+                    {this.state.model.spec && <Item label="规格" txt={this.state.model.spec} />}
+                    {this.state.model.ship_area && <Item label="发货区域" txt={this.state.model.ship_area} />}
+                    {this.state.model.after_sale && <Item label="售后说明" txt={this.state.model.after_sale} />}
+                    {this.state.model.pack && <Item label="包装" txt={this.state.model.pack} />}
                     <div className="tips flex-center">
                         <div className="unit">
                             <i className="icon-check"></i>正品保证
@@ -64,13 +78,10 @@ export default class extends React.Component<any, iDetailState> {
                 </div>
                 <div className="detail_info">
                     <div className="title">图文详情</div>
-                    <div className="content">
-                        <img src="http://img2.daling.com/data/files/zin/2019/02/23/22/27/1418774884DEJ2NM23FPQIBKE1C.jpg" alt="" />
-                        <img src="http://img0.daling.com/data/files/zin/2019/02/23/22/27/14187746A583J2NM24HLIHJ1HLC.jpg" alt="" />
-                    </div>
+                    <div className="content" dangerouslySetInnerHTML={{ __html: this.state.model.txts }}></div>
                 </div>
                 <div className="detail_foot"></div>
-                <div className="foot flex-left">
+                {/* <div className="foot flex-left">
                     <Link to="/">
                         <div className="back">
                             <img src="https://static.daling.com/assets/xc_touch/static/img/shop.b4d77f3.png" alt="" />
@@ -80,7 +91,7 @@ export default class extends React.Component<any, iDetailState> {
                         留 言
                     </div>
                     <div className="list unit">查 看</div>
-                </div>
+                </div> */}
                 {this.state.showTxt && (
                     <div className="talk_to flex-left">
                         <div className="unit">
@@ -94,7 +105,18 @@ export default class extends React.Component<any, iDetailState> {
             </div>
         );
     }
-
+    componentDidMount() {
+        this.getDetail();
+    }
+    async getDetail() {
+        if (!this.params.id) return;
+        try {
+            const data = await request.get('/goods/' + this.params.id);
+            this.setState({ model: data });
+        } catch (error) {
+            console.log(error);
+        }
+    }
     inputTxt = (e: any) => {
         this.setState({ txt: e.target.value });
     };

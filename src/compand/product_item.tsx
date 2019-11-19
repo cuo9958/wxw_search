@@ -6,6 +6,7 @@ interface iGood {
     title: string;
     price: string;
     sku: string;
+    id: number;
 }
 
 interface iProps {
@@ -15,10 +16,9 @@ interface iProps {
 export default class extends React.PureComponent<iProps> {
     render() {
         const item = this.props.item;
-        console.log(item);
         if (!item) return null;
         return (
-            <Link to={'/detail?sku=' + item.sku}>
+            <Link to={'/detail?id=' + item.id}>
                 <div className="product_item flex-left">
                     <div className="img">
                         <img className="img" src={item.image} alt="" />

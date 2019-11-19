@@ -1,3 +1,4 @@
+import urlParse from 'url-parse';
 /**
  * 将日期转成字符串
  * @param time
@@ -23,5 +24,8 @@ export default {
     DateFormartString: (ts: string, formart = 'yyyy-MM-dd hh:mm:ss') => {
         const time = new Date(ts);
         return DateFormart(time, formart);
+    },
+    parseParams(url: string) {
+        return urlParse(url, true);
     }
 };
