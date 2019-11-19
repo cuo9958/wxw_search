@@ -86,6 +86,7 @@
     "@types/react-dom": "16.9.2",
     "@types/react-router-dom": "^5.1.0",
     "@types/swiper": "^4.4.6",
+    "@types/url-parse": "^1.4.3",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "typescript": "3.6.4"
