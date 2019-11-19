@@ -15,7 +15,7 @@ export default class extends React.Component<iTest, iTest> {
     constructor(props: any) {
         super(props);
         this.state = {
-            list: [1, 2, 3, 4, 5],
+            list: [],
             refreshing: false,
             isEnd: false
         };
@@ -28,8 +28,8 @@ export default class extends React.Component<iTest, iTest> {
                 <Scroll onRefresh={this.onRefresh} refreshing={this.state.refreshing}>
                     <div className="searchbox"></div>
                     <div id="search_products">
-                        {this.state.list.map((item, index) => (
-                            <ProductItem key={index} />
+                        {this.state.list.map((item: any, index) => (
+                            <ProductItem item={item} key={index} />
                         ))}
                     </div>
                     <div className="scroll_end">{this.state.isEnd ? '没有更多了' : '加载中请稍后'}</div>
